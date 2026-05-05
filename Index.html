@@ -1,0 +1,66 @@
+"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog App</title>
+</head>
+<body>
+<h1>Blog Platform</h1>
+
+<h2>Register</h2>
+<input id="reg_user" placeholder="username">
+<input id="reg_pass" placeholder="password">
+<button onclick="register()">Register</button>
+
+<h2>Login</h2>
+<input id="log_user" placeholder="username">
+<input id="log_pass" placeholder="password">
+<button onclick="login()">Login</button>
+
+<h2>Create Post</h2>
+<input id="title" placeholder="title">
+<textarea id="content"></textarea>
+<button onclick="createPost()">Create</button>
+
+<h2>Posts</h2>
+<div id="posts"></div>
+
+<script>
+let token = "";
+
+function register(){
+    fetch('http://127.0.0.1:5000/register', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({username:reg_user.value, password:reg_pass.value})
+    })
+}
+
+function login(){
+    fetch('http://127.0.0.1:5000/login', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({username:log_user.value, password:log_pass.value})
+    })
+    .then(res=>res.json())
+    .then(data=> token = data.token)
+}
+
+function createPost(){
+    fetch('http://127.0.0.1:5000/posts', {
+        method:'POST', headers:{'Content-Type':'application/json', 'Authorization':'Bearer '+token},
+        body: JSON.stringify({title:title.value, content:content.value})
+    })
+}
+
+function loadPosts(){
+    fetch('http://127.0.0.1:5000/posts')
+    .then(res=>res.json())
+    .then(data=>{
+        posts.innerHTML = data.map(p=>`<h3>${p.title}</h3><p>${p.content}</p>`).join('')
+    })
+}
+
+loadPosts();
+</script>
+</body>
+</html>
+"""
