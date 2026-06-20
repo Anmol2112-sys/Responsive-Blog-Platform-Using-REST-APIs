@@ -13,7 +13,6 @@ def delete_post(id):
     db.session.commit()
     return jsonify({'msg': 'Deleted'})
 
-# ================= COMMENTS CRUD =================
 @app.route('/comments', methods=['POST'])
 @jwt_required()
 def add_comment():
@@ -29,7 +28,6 @@ def get_comments(post_id):
     comments = Comment.query.filter_by(post_id=post_id).all()
     return jsonify([{'id': c.id, 'text': c.text} for c in comments])
 
-# ================= RUN =================
 if __name__ == '__main__':
     db.create_all()
     app.run(debug=True)
